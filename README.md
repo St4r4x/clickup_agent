@@ -117,8 +117,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Code Structure
 
 - `src/`: Contains the main application source code.
-  - `main.py`: The CLI entry point and argument parsing logic.
+  - `main.py`: The CLI entry point and command registration logic.
   - `clickup_client.py`: The core `ClickUpClient` for API interactions.
+  - `commands/`: Contains the implementation for each CLI command.
+    - `base.py`: The base class for all commands.
+    - `...`: Individual command files.
 - `tests/`: Contains all unit tests.
 - `.env`: For storing your API token securely (not committed to Git).
 - `requirements.txt`: Production dependencies.

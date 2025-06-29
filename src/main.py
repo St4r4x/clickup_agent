@@ -101,44 +101,48 @@ def main():
 
         elif args.command == 'create-space':
             logger.info(
-                f"Creating space '{args.space_name}' in team {args.team_id}.")
+                "Creating space '%s' in team %s.", args.space_name, args.team_id)
             new_space = client.create_space(args.team_id, args.space_name)
             print(f"Successfully created space: '{new_space.get('name')}'")
             logger.info(
-                f"Successfully created space: '{new_space.get('name')}' with ID {new_space.get('id')}")
+                "Successfully created space: '%s' with ID %s", new_space.get('name'), new_space.get('id'))
 
         elif args.command == 'get-space':
-            logger.info(f"Fetching details for space {args.space_id}.")
+            logger.info("Fetching details for space %s.", args.space_id)
             space = client.get_space(args.space_id)
             print("Space details:")
             print(space)
 
         elif args.command == 'update-space':
             logger.info(
-                f"Updating space {args.space_id} with new name '{args.new_name}'.")
+                "Updating space %s with new name '%s'.", args.space_id, args.new_name)
             updated_space = client.update_space(args.space_id, args.new_name)
             print(
                 f"Successfully updated space to '{updated_space.get('name')}'")
-            logger.info(f"Successfully updated space {args.space_id}")
+            logger.info("Successfully updated space %s", args.space_id)
 
         elif args.command == 'delete-space':
-            logger.info(f"Deleting space with ID: {args.space_id}")
+            logger.info("Deleting space with ID: %s", args.space_id)
             client.delete_space(args.space_id)
             print(f"Successfully deleted space with ID: {args.space_id}")
-            logger.info(f"Successfully deleted space with ID: {args.space_id}")
+            logger.info("Successfully deleted space with ID: %s",
+                        args.space_id)
 
         else:
             parser.print_help()
 
     except HTTPError as e:
         logger.error(
-            f"API error occurred: {e.response.status_code} - {e.response.reason}")
-        logger.error(f"Response body: {e.response.text}")
+            "API error occurred: %s - %s", e.response.status_code, e.response.reason)
+        logger.error("Response body: %s", e.response.text)
         print(f"An API error occurred: {e}")
         print(f"Response body: {e.response.text}")
-    except Exception as e:
-        logger.exception("An unexpected error occurred: %s", e)
-        print(f"An unexpected error occurred: {e}")
+    except (ValueError, KeyError, TypeError) as e:
+        logger.exception("A handled error occurred: %s", e)
+        print(f"A handled error occurred: {e}")
+    except RuntimeError as e:
+        logger.exception("A runtime error occurred: %s", e)
+        print(f"A runtime error occurred: {e}")
 
 
 if __name__ == "__main__":
