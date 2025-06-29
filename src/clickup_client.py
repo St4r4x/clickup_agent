@@ -1,11 +1,13 @@
-import requests
 import logging
+
+import requests
 
 logger = logging.getLogger(__name__)
 
 
 class ClickUpClient:
     """A client for interacting with the ClickUp API."""
+
     def __init__(self, api_token: str, base_url: str = "https://api.clickup.com/api/v2/"):
         """
         Initializes the ClickUpClient.
@@ -25,7 +27,8 @@ class ClickUpClient:
 
     def get_teams(self):
         """Fetches the user's teams (workspaces)."""
-        response = self.session.get(f"{self.base_url}team", timeout=self.timeout)
+        response = self.session.get(
+            f"{self.base_url}team", timeout=self.timeout)
         response.raise_for_status()
         return response.json()
 

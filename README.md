@@ -19,23 +19,27 @@ ClickUp Agent is a powerful, production-quality Python command-line interface (C
 ### Installation
 
 1.  **Clone the repository:**
+
     ```bash
     git clone https://github.com/your-repo/clickup-agent.git
     cd clickup-agent
     ```
 
 2.  **Create and activate a Conda environment:**
+
     ```bash
     conda create --name clickup-agent-env python=3.9 -y
     conda activate clickup-agent-env
     ```
 
 3.  **Install dependencies:**
+
     ```bash
     pip install -r requirements.txt
     ```
 
 4.  **For development, install testing dependencies:**
+
     ```bash
     pip install -r requirements-dev.txt
     ```
@@ -49,6 +53,7 @@ ClickUp Agent is a powerful, production-quality Python command-line interface (C
 All commands are run from the project root. The main entry point is `src/main.py`.
 
 To see a list of available commands, run:
+
 ```bash
 python src/main.py --help
 ```
@@ -86,6 +91,7 @@ python src/main.py --help
 ## Testing
 
 To run the full suite of unit tests, use `pytest`:
+
 ```bash
 pytest
 ```

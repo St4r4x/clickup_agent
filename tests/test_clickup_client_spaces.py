@@ -1,25 +1,32 @@
 
-import pytest
 from unittest.mock import MagicMock
-from src.clickup_client import ClickUpClient
+
+import pytest
 import requests
+
+from src.clickup_client import ClickUpClient
+
 
 @pytest.fixture
 def client():
     """Fixture for ClickUpClient."""
     return ClickUpClient(api_token="test_token")
 
+
 def test_get_spaces(client, mocker):
     """Test getting spaces for a team."""
     mock_response = MagicMock()
-    mock_response.json.return_value = {"spaces": [{"id": "123", "name": "Test Space"}]}
+    mock_response.json.return_value = {
+        "spaces": [{"id": "123", "name": "Test Space"}]}
     mock_response.raise_for_status.return_value = None
     mocker.patch.object(client.session, "get", return_value=mock_response)
 
     spaces = client.get_spaces(team_id="test_team")
 
     assert spaces["spaces"][0]["name"] == "Test Space"
-    client.session.get.assert_called_with(f"{client.base_url}team/test_team/space", timeout=client.timeout)
+    client.session.get.assert_called_with(
+        f"{client.base_url}team/test_team/space", timeout=client.timeout)
+
 
 def test_get_space(client, mocker):
     """Test getting a single space."""
@@ -31,7 +38,9 @@ def test_get_space(client, mocker):
     space = client.get_space(space_id="123")
 
     assert space["name"] == "Test Space"
-    client.session.get.assert_called_with(f"{client.base_url}space/123", timeout=client.timeout)
+    client.session.get.assert_called_with(
+        f"{client.base_url}space/123", timeout=client.timeout)
+
 
 def test_create_space(client, mocker):
     """Test creating a space."""
@@ -49,6 +58,7 @@ def test_create_space(client, mocker):
         timeout=client.timeout
     )
 
+
 def test_update_space(client, mocker):
     """Test updating a space."""
     mock_response = MagicMock()
@@ -65,6 +75,7 @@ def test_update_space(client, mocker):
         timeout=client.timeout
     )
 
+
 def test_delete_space(client, mocker):
     """Test deleting a space."""
     mock_response = MagicMock()
@@ -75,11 +86,14 @@ def test_delete_space(client, mocker):
     response = client.delete_space(space_id="123")
 
     assert response == {}
-    client.session.delete.assert_called_with(f"{client.base_url}space/123", timeout=client.timeout)
+    client.session.delete.assert_called_with(
+        f"{client.base_url}space/123", timeout=client.timeout)
+
 
 def test_api_error(client, mocker):
     """Test that API errors are raised."""
-    mocker.patch.object(client.session, "get", side_effect=requests.exceptions.HTTPError("API Error"))
+    mocker.patch.object(client.session, "get",
+                        side_effect=requests.exceptions.HTTPError("API Error"))
 
     with pytest.raises(requests.exceptions.HTTPError):
         client.get_spaces(team_id="test_team")

@@ -1,22 +1,29 @@
 
-import pytest
-from unittest.mock import MagicMock, patch
-from src.main import main
-from src.clickup_client import ClickUpClient
 import sys
+from unittest.mock import MagicMock, patch
+
+import pytest
+
+from src.clickup_client import ClickUpClient
+from src.main import main
+
 
 @pytest.fixture
 def mock_client():
     """Fixture for a mocked ClickUpClient."""
     with patch('src.main.ClickUpClient') as mock:
         instance = mock.return_value
-        instance.get_teams.return_value = {"teams": [{"id": "123", "name": "Test Team"}]}
-        instance.get_spaces.return_value = {"spaces": [{"id": "456", "name": "Test Space"}]}
+        instance.get_teams.return_value = {
+            "teams": [{"id": "123", "name": "Test Team"}]}
+        instance.get_spaces.return_value = {
+            "spaces": [{"id": "456", "name": "Test Space"}]}
         instance.create_space.return_value = {"id": "789", "name": "New Space"}
         instance.get_space.return_value = {"id": "456", "name": "Test Space"}
-        instance.update_space.return_value = {"id": "456", "name": "Updated Space"}
+        instance.update_space.return_value = {
+            "id": "456", "name": "Updated Space"}
         instance.delete_space.return_value = {}
         yield mock
+
 
 @patch('src.main.os.getenv', return_value="test_token")
 def test_list_teams(mock_getenv, mock_client, capsys):
@@ -26,6 +33,7 @@ def test_list_teams(mock_getenv, mock_client, capsys):
     captured = capsys.readouterr()
     assert "Test Team" in captured.out
 
+
 @patch('src.main.os.getenv', return_value="test_token")
 def test_list_spaces(mock_getenv, mock_client, capsys):
     """Test the list-spaces command."""
@@ -33,6 +41,7 @@ def test_list_spaces(mock_getenv, mock_client, capsys):
     main()
     captured = capsys.readouterr()
     assert "Test Space" in captured.out
+
 
 @patch('src.main.os.getenv', return_value="test_token")
 def test_create_space(mock_getenv, mock_client, capsys):
@@ -42,6 +51,7 @@ def test_create_space(mock_getenv, mock_client, capsys):
     captured = capsys.readouterr()
     assert "Successfully created space: 'New Space'" in captured.out
 
+
 @patch('src.main.os.getenv', return_value="test_token")
 def test_get_space(mock_getenv, mock_client, capsys):
     """Test the get-space command."""
@@ -49,6 +59,7 @@ def test_get_space(mock_getenv, mock_client, capsys):
     main()
     captured = capsys.readouterr()
     assert "Test Space" in captured.out
+
 
 @patch('src.main.os.getenv', return_value="test_token")
 def test_update_space(mock_getenv, mock_client, capsys):
@@ -58,6 +69,7 @@ def test_update_space(mock_getenv, mock_client, capsys):
     captured = capsys.readouterr()
     assert "Successfully updated space to 'Updated Space'" in captured.out
 
+
 @patch('src.main.os.getenv', return_value="test_token")
 def test_delete_space(mock_getenv, mock_client, capsys):
     """Test the delete-space command."""
@@ -65,6 +77,7 @@ def test_delete_space(mock_getenv, mock_client, capsys):
     main()
     captured = capsys.readouterr()
     assert "Successfully deleted space with ID: 456" in captured.out
+
 
 @patch('src.main.os.getenv', return_value=None)
 def test_no_api_token(mock_getenv, capsys):
